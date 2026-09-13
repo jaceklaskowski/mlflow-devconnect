@@ -1,0 +1,35 @@
+set shell := ["bash", "-cu"]
+
+# List available recipes
+_default:
+    @just --list
+
+# Install/sync dependencies into the uv-managed virtualenv
+sync:
+    uv sync
+
+# Fail fast if ANTHROPIC_API_KEY isn't set (required by the agent and the judge)
+check-env:
+    @test -n "${ANTHROPIC_API_KEY:-}" || (echo "ANTHROPIC_API_KEY is not set" >&2 && exit 1)
+
+# Wipe local MLflow state and pytest cache for a clean rehearsal
+reset:
+    @./reset_demo.sh
+
+# Run the quality gate against the buggy agent -- RED, ~60% pass rate
+test-buggy: check-env
+    uv run pytest test_agent_quality.py -v
+
+# Run the quality gate against the fixed agent -- GREEN, 100% pass rate
+test-fixed: check-env
+    ORDERBOT_FIXED=1 uv run pytest test_agent_quality.py -v
+
+# Launch the MLflow UI to inspect traces + eval results
+ui: check-env
+    uv run mlflow ui
+
+# Reset state, then walk through the full red -> green demo flow
+demo: reset
+    @echo "1. In one terminal: just ui"
+    @echo "2. In another:      just test-buggy   (RED)"
+    @echo "3. Then:            just test-fixed   (GREEN)"

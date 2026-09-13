@@ -1,10 +1,12 @@
 # Live demo script -- ~6 minutes, terminal + browser side by side
 
-Setup before you go on stage:
-- `./reset_demo.sh` (clean slate, so run counts/trace counts in the UI aren't confusing)
-- Two terminal tabs: one for `pytest`, one for `mlflow ui` (start it now, leave it running)
-- Browser tab open on `http://127.0.0.1:5000`, pinned to the `orderbot-quality-gate` experiment
-- Font size big. Close Slack/notifications. Confirm `ANTHROPIC_API_KEY` is set in both shells.
+## Before you go live
+
+1. `./reset_demo.sh` (clean slate, so run counts/trace counts in the UI aren't confusing)
+1. Open a terminal tab and run `uv run mlflow ui`. Leave it running.
+1. Open `http://127.0.0.1:5000` and go to the `orderbot-quality-gate` experiment
+1. Open another terminal tab for `uv run pytest`
+1. Font size big. Close Slack/notifications. Confirm `ANTHROPIC_API_KEY` is set in both shells.
 
 Backup: a screen recording of a full successful run (red -> green), in case
 conference wifi kills the live Anthropic calls. Cue it up muted in another tab.
@@ -17,7 +19,7 @@ Say: "OrderBot is a small support agent. It's got a pytest test that gates its
 refund-eligibility answers. Let's just run it."
 
 ```sh
-pytest test_agent_quality.py -v
+uv run pytest test_agent_quality.py -v
 ```
 
 While it runs (~25s): "Five questions, an LLM judge scoring each answer against
@@ -47,7 +49,7 @@ the tool it needs and telling it to trust it, not guess." (Optionally flip open
 `orderbot/agent.py` for 5 seconds to show `FIXED_SYSTEM_PROMPT`.)
 
 ```sh
-ORDERBOT_FIXED=1 pytest test_agent_quality.py -v
+ORDERBOT_FIXED=1 uv run pytest test_agent_quality.py -v
 ```
 
 Green, 100%.

@@ -4,6 +4,8 @@ A tiny Claude-powered customer-support agent ("OrderBot") with a real, reproduci
 bug, wired up to demonstrate the full MLflow loop: **trace -> find a failure ->
 turn it into an eval -> score with an LLM judge -> gate it in pytest.**
 
+The demo is `just demo` away.
+
 ## The bug, in one sentence
 
 OrderBot's refund policy has an exception -- flash-sale ("promo") orders get a
@@ -15,11 +17,10 @@ tool. Same model, same question, different (correct) answer.
 
 ## Setup
 
+Dependencies are managed with [uv](https://docs.astral.sh/uv/).
+
 ```sh
 cd orderbot_demo
-python3 -m venv ../.venv        # or reuse an existing venv
-source ../.venv/bin/activate
-pip install -r requirements.txt
 export ANTHROPIC_API_KEY=...    # required -- used by both the agent and the judge
 ```
 
@@ -27,13 +28,13 @@ export ANTHROPIC_API_KEY=...    # required -- used by both the agent and the jud
 
 ```sh
 # Buggy agent (default) -- RED
-pytest test_agent_quality.py -v
+uv run pytest test_agent_quality.py -v
 
 # Fixed agent -- GREEN
-ORDERBOT_FIXED=1 pytest test_agent_quality.py -v
+ORDERBOT_FIXED=1 uv run pytest test_agent_quality.py -v
 
 # Look at the traces + eval results
-mlflow ui
+uv run mlflow ui
 ```
 
 `./reset_demo.sh` wipes local MLflow state (`mlruns/`, `.pytest_cache/`) for a
@@ -41,6 +42,8 @@ clean rehearsal.
 
 ## Project layout
 
+- `pyproject.toml` / `uv.lock` -- the uv-managed dependency set (runtime deps +
+  a `dev` group for `pytest`).
 - `orderbot/tools.py` -- fake order DB + the two tools (`lookup_order`,
   `check_refund_eligibility`), each wrapped in `@mlflow.trace`.
 - `orderbot/agent.py` -- the tool-calling loop, in buggy and fixed flavors

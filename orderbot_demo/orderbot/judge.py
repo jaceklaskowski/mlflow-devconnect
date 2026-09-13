@@ -7,7 +7,7 @@ import anthropic
 from mlflow.entities import Feedback
 from mlflow.genai.scorers import scorer
 
-JUDGE_MODEL = "claude-haiku-4-5-20251001"
+JUDGE_MODEL = "claude-haiku-4-5"
 
 _client = anthropic.Anthropic()
 
@@ -38,7 +38,9 @@ def refund_policy_correctness(inputs, outputs, expectations) -> Feedback:
     response = _client.messages.create(
         model=JUDGE_MODEL,
         max_tokens=100,
-        temperature=0,
+        # anthropic 1.x dropped `temperature` from the typed create() signature;
+        # pass it through extra_body so the judge stays deterministic.
+        extra_body={"temperature": 0},
         messages=[{"role": "user", "content": prompt}],
     )
     text = response.content[0].text.strip()

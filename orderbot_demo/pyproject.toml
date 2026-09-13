@@ -1,0 +1,19 @@
+[project]
+name = "orderbot-demo"
+version = "0.1.0"
+description = "OrderBot -- eval-driven development demo for the MLflow trace -> eval -> judge -> gate loop"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "mlflow==3.16.0",
+    "anthropic",
+    "pandas",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+]
+
+[tool.uv]
+package = false
