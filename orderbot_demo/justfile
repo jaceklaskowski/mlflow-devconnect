@@ -6,9 +6,10 @@ _default:
 
 # Install/sync dependencies into the uv-managed virtualenv
 sync:
-    uv sync
+    @uv sync -U
 
 # Fail fast if ANTHROPIC_API_KEY isn't set (required by the agent and the judge)
+[private]
 check-env:
     @test -n "${ANTHROPIC_API_KEY:-}" || (echo "ANTHROPIC_API_KEY is not set" >&2 && exit 1)
 
