@@ -27,7 +27,7 @@ test-fixed: check-env
 
 # Launch the MLflow UI to inspect traces + eval results
 ui: check-env
-    uv run mlflow ui
+    uv run mlflow ui --port 5555
 
 # Reset state, then walk through the full red -> green demo flow
 demo: reset

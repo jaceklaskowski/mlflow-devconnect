@@ -4,7 +4,7 @@
 
 1. `./reset_demo.sh` (clean slate, so run counts/trace counts in the UI aren't confusing)
 1. Open a terminal tab and run `uv run mlflow ui`. Leave it running.
-1. Open `http://127.0.0.1:5000` and go to the `orderbot-quality-gate` experiment
+1. Open `http://127.0.0.1:5555` and go to the `orderbot-quality-gate` experiment
 1. Open another terminal tab for `uv run pytest`
 1. Font size big. Close Slack/notifications. Confirm `ANTHROPIC_API_KEY` is set in both shells.
 
