@@ -25,9 +25,9 @@ uv run pytest test_agent_quality.py -v
 While it runs (~25s): "Five questions, an LLM judge scoring each answer against
 ground truth, an assertion at the end."
 
-It fails. Point at the pass rate (60%) and the printed failure table -- don't
-read the whole diff, just land on order **A1002**: agent said "you're eligible",
-judge says wrong.
+It fails. Point at the pass rate (`refund_policy_correctness/mean`, usually
+~40-60%) and the printed failure list -- don't read the whole diff, just land
+on order **A1002**: agent said "you're eligible", judge says wrong.
 
 ## 2. Why: look at the trace (~90s)
 
@@ -56,7 +56,7 @@ Green, 100%.
 
 ## 4. Compare, in the UI (~60s)
 
-Back to browser: the experiment's runs table now shows `buggy` (60%) and
+Back to browser: the experiment's runs table now shows `buggy` (red) and
 `fixed` (100%) side by side -- select both, hit Compare if there's time. Open
 the `fixed` run's A1002 trace: now there are two tool calls, and the second one
 carries the real answer.

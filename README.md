@@ -62,15 +62,9 @@ just test-fixed
 - `orderbot/eval_dataset.py` -- 5 questions covering the trap case plus sanity
   checks (already-expired order, not-yet-delivered, cancelled).
 - `orderbot/judge.py` -- a hand-rolled LLM-judge scorer using
-  `mlflow.genai.scorers.scorer`.
-- `orderbot/evaluate.py` -- a small dependency-free eval harness that runs the
-  agent + judge over the dataset and logs the results as an MLflow run.
-- `test_agent_quality.py` -- the pytest gate.
-
-Note: `mlflow.genai.evaluate()` is the "official" convenience wrapper for this
-same loop, but as of mlflow 3.1 it hard-requires the `databricks-agents` package
-(which, worse, pins an old mlflow version and will silently downgrade your
-environment if installed). `orderbot/evaluate.py` does the same job -- predict,
-judge, aggregate, log -- with nothing beyond MLflow itself, which is both safer
-for a live demo and a better illustration of what's actually happening under
-the hood.
+  `mlflow.genai.scorers.scorer`. No managed judge service required -- just
+  Claude, a rubric, and a `Feedback` object.
+- `test_agent_quality.py` -- the pytest gate. Runs the agent + judge over the
+  dataset with `mlflow.genai.evaluate()` (MLflow's own eval loop -- predict,
+  score, aggregate, log, all linked back to per-row traces in the run) and
+  asserts on the returned `result.passed`.

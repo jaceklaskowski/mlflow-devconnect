@@ -29,10 +29,11 @@ one word, "pass" or "fail". On the second line, give a one-sentence rationale.
 
 @scorer
 def refund_policy_correctness(inputs, outputs, expectations) -> Feedback:
+    ground_truth = expectations["ground_truth"]
     prompt = PROMPT_TEMPLATE.format(
         question=inputs["question"],
-        eligible=expectations["eligible"],
-        reason=expectations["reason"],
+        eligible=ground_truth["eligible"],
+        reason=ground_truth["reason"],
         output=outputs,
     )
     response = _client.messages.create(
