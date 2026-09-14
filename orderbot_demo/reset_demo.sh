@@ -4,5 +4,5 @@
 
 set -e
 cd "$(dirname "$0")"
-rm -rf mlruns mlartifacts .pytest_cache
+rm -rf mlflow.db mlruns mlartifacts .pytest_cache
 echo "Demo state reset."

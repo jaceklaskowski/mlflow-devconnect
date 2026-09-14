@@ -1,10 +1,20 @@
-# OrderBot -- eval-driven development demo
+# OrderBot &mdash; eval-driven development demo
 
 A tiny Claude-powered customer-support agent ("OrderBot") with a real, reproducible
 bug, wired up to demonstrate the full MLflow loop: **trace -> find a failure ->
 turn it into an eval -> score with an LLM judge -> gate it in pytest.**
 
+## Just Demo
+
 The demo is `just demo` away.
+
+```sh
+just demo
+Demo state reset.
+1. In one terminal: just ui
+2. In another:      just test-buggy   (RED)
+3. Then:            just test-fixed   (GREEN)
+```
 
 ## The bug, in one sentence
 
@@ -26,24 +36,25 @@ export ANTHROPIC_API_KEY=...    # required -- used by both the agent and the jud
 
 ## Run it
 
+Start MLflow UI.
+
 ```sh
-# Buggy agent (default) -- RED
-uv run pytest test_agent_quality.py -v
-
-# Fixed agent -- GREEN
-ORDERBOT_FIXED=1 uv run pytest test_agent_quality.py -v
-
-# Look at the traces + eval results
-uv run mlflow ui
+# Review traces and eval results
+just ui
 ```
 
-`./reset_demo.sh` wipes local MLflow state (`mlruns/`, `.pytest_cache/`) for a
-clean rehearsal.
+```sh
+# Buggy agent (default) -- RED
+just test-buggy
+```
+
+```sh
+# Fixed agent -- GREEN
+just test-fixed
+```
 
 ## Project layout
 
-- `pyproject.toml` / `uv.lock` -- the uv-managed dependency set (runtime deps +
-  a `dev` group for `pytest`).
 - `orderbot/tools.py` -- fake order DB + the two tools (`lookup_order`,
   `check_refund_eligibility`), each wrapped in `@mlflow.trace`.
 - `orderbot/agent.py` -- the tool-calling loop, in buggy and fixed flavors

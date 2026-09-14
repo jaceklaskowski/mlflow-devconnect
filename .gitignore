@@ -4,3 +4,4 @@ __pycache__/
 .pytest_cache/
 mlruns/
 mlartifacts/
+orderbot_demo/mlflow.db
